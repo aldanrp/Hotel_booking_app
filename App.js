@@ -5,10 +5,12 @@ import {createStackNavigator} from '@react-navigation/stack';
 import { Image, StyleSheet, Text, View , StatusBar} from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 
-
 import HomeScreen from './src/pindah/HomeScreen';
 import DetailsScreen from './src/pindah/DetailsScren';
 import LoginScreen from './src/pindah/LoginScreen';
+import Showall from './src/pindah/Showall';
+import PersonScreen from './src/pindah/PersonScreen';
+import BookingScreen from './src/pindah/BookingScreen';
 import COLORS from './src/conts/colors';
 
 const AppStack = createStackNavigator();
@@ -21,7 +23,7 @@ const slides = [
       text:
       "Lorem ipsum dolor sit amet consecte tuer adipsing elit sed diam monum my nibh eusimod eltor",
       image: require("./src/assets/onboarding-img1.png"),
-      backgroundColor: "#a6e4d8"
+      backgroundColor: "#97D4E7"
   },
   {
       key: "two",
@@ -29,7 +31,7 @@ const slides = [
       text:
       "Lorem ipsum dolor sit amet consecte tuer adipsing elit sed diam monum my nibh eusimod eltor",
       image: require("./src/assets/onboarding-img2.png"),
-      backgroundColor:'#febe29',
+      backgroundColor:'rgba(251,188,88,0.7)',
   },
   {
       key: "three",
@@ -37,7 +39,7 @@ const slides = [
       text:
       "Lorem ipsum dolor sit amet consecte tuer adipsing elit sed diam monum my nibh eusimod eltor",
       image: require("./src/assets/onboarding-img3.png"),
-      backgroundColor : '#e9bcbe',
+      backgroundColor : '#fbc7c3',
   },
 ];
 
@@ -55,7 +57,8 @@ export default class App extends React.Component {
         <Image
         source={item.image}
         style={{
-            resizeMode: "cover",
+            resizeMode:'cover',
+            
         }}
         />
         <Text
@@ -73,9 +76,9 @@ export default class App extends React.Component {
 
         <Text style={{
             textAlign:"center",
-            color:COLORS.grey,
+            color:'rgba(21,25,47,0.7)',
             fontSize:15,
-            paddingHorizontal:30
+            paddingHorizontal:20
         }}>
         {item.text}
         </Text>
@@ -99,6 +102,10 @@ export default class App extends React.Component {
             >
               <AppStack.Screen name="Home" component={HomeScreen} />
               <AppStack.Screen name="Details" component={DetailsScreen} />
+              <AppStack.Screen name="showall" component={Showall}/>
+              <AppStack.Screen name="PersonScreen" component={PersonScreen}/>
+              <AppStack.Screen name="BookingScreen" component={BookingScreen}/>
+              
             </AppStack.Navigator>
           </NavigationContainer>
         );
@@ -122,6 +129,8 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
       flex: 1,
+      
+    
   },
 });
 

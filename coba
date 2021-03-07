@@ -1,126 +1,213 @@
 import React from 'react';
-import 'react-native-gesture-handler'
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import { Image, StyleSheet, Text, View , StatusBar} from "react-native";
-import AppIntroSlider from "react-native-app-intro-slider";
+import { 
+    SafeAreaView , 
+    Text, 
+    View,
+    StyleSheet, 
+    ScrollView, 
+    ColorPropType, 
+    TextInput, 
+    Touchable, 
+    TouchableOpacity, 
+    FlatList, 
+    Dimensions,
+    Image,
+} from 'react-native';
 
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import COLORS from '../conts/colors';
+import hotels from '../conts/hotels';
+const {width} = Dimensions.get('screen');
+const cardWidth = width /1.8 ;
 
-import HomeScreen from './src/pindah/HomeScreen';
-import DetailsScreen from './src/pindah/DetailsScren';
-import LoginScreen from './src/pindah/LoginScreen';
-import COLORS from './src/conts/colors';
+const HomeScreen = ({navigation}) => {
+    const categories = ['All', 'Popular', 'Top Rated', 'Featured','Luxury'];
+    const [selectCategoriesIndex , setselectCategoriesIndex] = React.useState(0);
 
-const AppStack = createStackNavigator();
-
-
-const slides = [
-  {
-      key: "one",
-      title: "JUST TRAVEL",
-      text:
-      "Lorem ipsum dolor sit amet consecte tuer adipsing elit sed diam monum my nibh eusimod eltor",
-      image: require("./src/assets/onboarding-img1.png"),
-      backgroundColor: "#a6e4d8"
-  },
-  {
-      key: "two",
-      title: "TAKE A BREAK",
-      text:
-      "Lorem ipsum dolor sit amet consecte tuer adipsing elit sed diam monum my nibh eusimod eltor",
-      image: require("./src/assets/onboarding-img2.png"),
-      backgroundColor:'#febe29',
-  },
-  {
-      key: "three",
-      title: "ENJOY YOUR JOURNEY",
-      text:
-      "Lorem ipsum dolor sit amet consecte tuer adipsing elit sed diam monum my nibh eusimod eltor",
-      image: require("./src/assets/onboarding-img3.png"),
-      backgroundColor : '#e9bcbe',
-  },
-];
-
-export default class App extends React.Component {
-  state = { showHomePage: false };
-  _renderItem = ({ item }) => {
-      return (
-      <View style={{
-        flex: 1,
-        backgroundColor: item.backgroundColor,}}
-      >
-        <Image
-        source={item.image}
-        style={{
-            resizeMode: "cover",
-            height: "70%",
-            width: "auto",
-        }}
-        />
-        <Text
-        style={{
-            paddingTop: 25,
-            paddingBottom: 10,
-            fontSize: 23,
-            fontWeight: "bold",
-            color: "#21465b",
-            alignSelf: "center",
-        }}
-        >
-        {item.title}
-        </Text>
-
-        <Text style={{
-            textAlign:"center",
-            color:COLORS.grey,
-            fontSize:15,
-            paddingHorizontal:30
-        }}>
-        {item.text}
-        </Text>
-      </View>
-      );
-  };
-
-  _onDone = () => {
-      // User finished the introduction. Show real app through
-      // navigation or simply by controlling state
-      this.setState({  showHomePage: true });
-  }
-
-  render() {
-      if (this.state.showHomePage){
+    
+    const CategoriesList = () => {
         return (
-          <NavigationContainer>
-            <StatusBar backgroundColor={COLORS.white} barStyle='dark-content'></StatusBar>
-            <AppStack.Navigator
-              screenOptions = {{headerShown: false}}
-            >
-              <AppStack.Screen name="Home" component={HomeScreen} />
-              <AppStack.Screen name="Details" component={DetailsScreen} />
-            </AppStack.Navigator>
-          </NavigationContainer>
+            <View style={styles.categoriescontainer} >
+                {categories.map((item , index) => (
+                    <TouchableOpacity 
+                        key={index} 
+                        activeOpacity={0.8}
+                        onPress={()=>setselectCategoriesIndex(index)}>
+                        <View>
+                            <Text style={{
+                                ...styles.CategoriesListText , 
+                                color:selectCategoriesIndex == index ? COLORS.primary : COLORS.grey}} 
+                            >{item}</Text>
+                            {selectCategoriesIndex == index && (
+                                <View style={{
+                                    height:3,
+                                    width:30 , 
+                                    backgroundColor:COLORS.primary ,
+                                    marginTop:2 }}
+                                />
+                            )}
+                        </View>
+                    </TouchableOpacity>
+                )) }
+            </View>
         );
-      } 
-      else {
-          return (
-              <AppIntroSlider
-              renderItem={this._renderItem} 
-              data={slides} 
-              activeDotStyle={{
-                  backgroundColor:"#21465b",
-                  width:30
-              }}
-              onDone={this._onDone}
-              />
-          );
-      }
-  }
+    };
+    const Card = ({hotel , index}) => {
+        return (
+            <View style={{...styles.card}}>
+                <View style={{...styles.cardOverlay, opacity: 0}}/>
+                <View style={styles.pricetag}>
+                    <Text style={{
+                        color:COLORS.white, 
+                        fontSize:20, 
+                        fontWeight:'bold'
+                        }}>
+                            ${hotel.price}
+                    </Text>
+                </View>
+                <Image source={hotel.image} style={styles.cardimage}/>
+                <View style={styles.cardDetails}>
+                    <View style={{flexDirection:'row', justifyContent:'space-between' }}>
+                        <View>
+                        <Text style={{fontSize: 17, fontWeight:'bold'}}>
+                            {hotel.name}
+                        </Text>
+                        <Text style={{fontSize: 12, color:COLORS.grey}}>
+                            {hotel.location}
+                        </Text>
+                        </View>
+                        <Icon name='bookmark-border' size={26} color={COLORS.primary} />
+                    </View>
+                    <View style={{
+                        flexDirection:'row',
+                        justifyContent:'space-between',
+                        marginTop:10,
+                    }}>
+                        <View style={{flexDirection:'row'}}>
+                            <Icon name="star" size={15} color={COLORS.orange} />
+                            <Icon name="star" size={15} color={COLORS.orange} />
+                            <Icon name="star" size={15} color={COLORS.orange} />
+                            <Icon name="star" size={15} color={COLORS.orange} />
+                            <Icon name="star" size={15} color={COLORS.grey} />
+                        </View>
+                        <Text style={{fontSize:10  , color:COLORS.grey}}>365Reviews</Text>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
+    return (
+        <SafeAreaView style = {{flex:1 ,  backgroundColor:COLORS.white}}>
+            <View style={styles.header}>
+                <View style={{paddingBottom:15}}>
+                    <Text style={{fontSize:30 , fontWeight:'bold'}}>
+                        Find your hotel
+                    </Text>
+                    <View style={{flexDirection:'row'}}>
+                        <Text style={{fontSize:30, fontWeight:'bold', }}>In </Text>
+                        <Text style={{fontSize:30, fontWeight:'bold', color:COLORS.primary }}>
+                            Paris
+                        </Text>
+                    </View>
+                </View>
+                <Icon name="person-outline" size={38} color={COLORS.grey}/>
+            </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.searchInputContainer}>
+                <Icon name="search" size={30} style={{marginLeft:20}} />
+                <TextInput 
+                    placeholder="search"
+                    style={{fontSize:20 , paddingLeft:10}}
+                />
+                </View>
+                <CategoriesList />
+                <View>
+                    <FlatList 
+                        horizontal
+                        data={hotels}
+                        contentContainerStyle={{paddingVertical: 30, paddingLeft:20, }}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({item,index}) => <Card hotel={item} index={index} />} 
+                    />
+                </View>
+            </ScrollView>
+        </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-  },
-});
+    header :{
+        marginTop:20,
+        flexDirection:'row',
+        justifyContent:'space-between',
+        paddingHorizontal: 20
+    },
+    searchInputContainer:{
+        height:50,
+        backgroundColor:COLORS.light,
+        marginTop: 15,
+        marginLeft: 20,
+        marginRight:10,
+        borderTopLeftRadius: 30,
+        borderBottomLeftRadius: 30,
+        flexDirection:'row',
+        alignItems:'center',
+    },
+    categoriescontainer:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginHorizontal: 20,
+        marginTop: 30,
+    },
+    CategoriesListText: {
+        fontSize:15,
+        fontWeight:'bold',
+    },
+    card :{
+        height:280,
+        width:cardWidth,
+        elevation:15,
+        marginRight:20,
+        borderRadius:15,
+        backgroundColor:COLORS.white
+    },
+    cardimage:{
+        height:200,
+        width:"100%",
+        borderTopLeftRadius:15,
+        borderTopRightRadius:15,
+    },
+    pricetag:{
+        height: 60,
+        width: 80,
+        backgroundColor:COLORS.primary,
+        position:'absolute',
+        zIndex: 1,
+        right: 0,
+        borderTopRightRadius:15,
+        borderBottomLeftRadius:15,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    cardDetails:{
+        height: 100,
+        width:'100%',
+        borderRadius: 15,
+        backgroundColor:COLORS.white,
+        position: 'absolute',
+        bottom: 0 ,
+        marginBottom:10,
+        padding: 20,
+    },
+    cardOverlay: {
+        height: 280,
+        backgroundColor: COLORS.light,
+        position:'absolute',
+        zIndex: 100,
+        width: cardWidth,
+        borderRadius: 15,
+    }
+})
 
+export default HomeScreen ; 

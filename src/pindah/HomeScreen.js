@@ -75,7 +75,7 @@ const HomeScreen = ({navigation}) => {
                 onPress={()=> navigation.navigate('Details', hotel)}
             >
                 <Animated.View style={{...styles.card , transform:[{scale}]}}>
-                <Animated.View style={{...styles.cardOverlay, opacity}}/>
+                    <Animated.View style={{...styles.cardOverlay, opacity}}/>
                     <View style={styles.pricetag}>
                         <Text style={{
                             color:COLORS.white, 
@@ -157,16 +157,16 @@ const HomeScreen = ({navigation}) => {
                     </View>
                 </View>
                 <TouchableOpacity activeOpacity={1} onPress={()=> navigation.navigate('PersonScreen')}>
-                <Icon name="person-outline" size={38} color={COLORS.grey}/>
+                    <Icon name="person-outline" size={38} color={COLORS.grey}/>
                 </TouchableOpacity>
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.searchInputContainer}>
-                <Icon name="search" size={30} style={{marginLeft:20}} />
-                <TextInput 
-                    placeholder="search"
-                    style={{fontSize:20 , paddingLeft:10}}
-                />
+                    <Icon name="search" size={30} style={{marginLeft:20}} />
+                    <TextInput 
+                        placeholder="search"
+                        style={{fontSize:20 , paddingLeft:10}}
+                    />
                 </View>
                 <CategoriesList />
                 <View>
